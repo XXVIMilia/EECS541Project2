@@ -1,0 +1,11 @@
+# Datatypes (KEYWORD1)
+
+# Functions (KEYWORD2)
+DigitalRead	KEYWORD2
+DigitalWrite	KEYWORD2
+DigitalToggle	KEYWORD2
+# Structures (KEYWORD3)
+
+# Constants (LITERAL1)
+
+# Others (LITERAL2)
