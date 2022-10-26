@@ -52,6 +52,7 @@ void calibrateDelay(){
   }
   
   detectedBitRate = sum / 9;
+  detectedSignal = 1;
 
 }
 
