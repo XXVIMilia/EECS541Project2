@@ -3,7 +3,7 @@
 
 
 //Signal Detection Variables
-volatile unsigned long riseTime = 0;
+volatile unsigned long fallTime = 0;
 volatile unsigned long prevTime = 0;
 volatile unsigned long sampledDelays[20];
 volatile bool trigger = 0;
@@ -11,6 +11,7 @@ volatile int count = 0;
 volatile bool checkDelay = 0;
 unsigned long detectedBitRate = 0;
 volatile bool calibrating = 0;
+volatile bool hit;
 
 //Timing Verification Variables
 unsigned long prevTimeStamp;
@@ -32,12 +33,12 @@ char decodedMessage;
 //User input
 char command;
 
-//Rise Time Detection Callback Function
-void rise(){
+//fall Time Detection Callback Function
+void fall(){
   if(calibrating){
-    prevTime = riseTime;
-    riseTime = micros();
-    sampledDelays[count % 20] = riseTime - prevTime;
+    prevTime = fallTime;
+    fallTime = micros();
+    sampledDelays[count % 20] = fallTime - prevTime;
     count++;
   }
   
@@ -47,7 +48,7 @@ void rise(){
 void calibrateDelay(){
   count = 0;
   calibrating = 1;
-  attachInterrupt(digitalPinToInterrupt(2),rise,FALLING);
+  attachInterrupt(digitalPinToInterrupt(2),fall,FALLING);
   while(count < 20){
     //Busy Wait
   }
@@ -64,13 +65,24 @@ void calibrateDelay(){
 
 }
 
+
 void readData(){
     digitalWrite(3, LOW);
-    incomingPacket[readCount % 12] = !digitalRead(2);
-    readCount++;
-    if(readCount == 12){
-        Timer1.detachInterrupt();
+    if(reading){
+      if(hit){
+      incomingPacket[readCount % 12] = 1;
     }
+    else{
+      incomingPacket[readCount % 12] = 0;
+    }
+    
+    readCount++;
+    // if(readCount == 12){
+    //     Timer1.detachInterrupt();
+    // }
+    hit = 0;
+    }
+    
     
 }
 
@@ -79,17 +91,26 @@ void readData(){
 
 
 //Simple cleanup function
-void resetSamples(){
+void resetArrays(){
   for(int i = 0; i < 20; i++){
     sampledDelays[i] = 0;
   }
+  for(int i = 0; i < 12; i++){
+    incomingPacket[i] = 0;
+  }
 }
 
-//Use for getting exact start of signal tranmsission
+
+//Use for getting exact start of signal tranmsission. Used for detecting falling edge of bits
 void awaitTriggerSignal(){
-  trigger = 1;
-  Timer1.start();
-  detachInterrupt(digitalPinToInterrupt(2));
+  if(!trigger){
+    trigger = 1;
+    Timer1.start();
+    hit = 0;
+  }
+  else{
+     hit = 1;
+  }  
 }
 
 
@@ -99,15 +120,18 @@ bool verifySignal(){
   trigger = 0;
   readCount = 0;
 
-  Timer1.attachInterrupt(readData,detectedBitRate);  
+  //Timer1.attachInterrupt(readData,detectedBitRate);  
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
+  reading = 1;
 
   
   while(readCount < 12){
     //delayMicroseconds(100);
     digitalWrite(3, HIGH);
   }
+  reading = 0;
+  detachInterrupt(digitalPinToInterrupt(2));
 
   digitalWrite(3, HIGH);
 
@@ -127,14 +151,18 @@ void readMessage(){
   trigger = 0;
   readCount = 0;
 
-
+  //Timer1.attachInterrupt(readData,detectedBitRate); 
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
+  reading = 1;
   
-
-  Timer1.attachInterrupt(readData,detectedBitRate);
-  while(readCount < 12){}
-  Timer1.detachInterrupt();
+  while(readCount < 12){
+    digitalWrite(3, HIGH);
+  }
+  //Timer1.detachInterrupt();
+  reading = 0;
+  detachInterrupt(digitalPinToInterrupt(2));
+  
 }
 
 
@@ -157,10 +185,12 @@ void loop() {
 
   if(command == 'c'){
     Serial.println("Attempting to detect signal");
-    resetSamples();
+    resetArrays();
     calibrateDelay();
     Serial.print("Detected Bit Rate: ");
     Serial.println(detectedBitRate);
+    Timer1.attachInterrupt(readData,detectedBitRate); 
+
 
     //Validating
     Serial.println("Attempting to validate signal");
@@ -183,6 +213,7 @@ void loop() {
   }
   else if(command == 'r'){
       if(recievingMode){
+      resetArrays();
       Serial.print("Entering reading mode in: \n3...");
       delay(1000);
       Serial.print("2...");
@@ -190,11 +221,10 @@ void loop() {
       Serial.println("1...");
       delay(1000);
       readMessage();
-      for(int i = 0; i < 9; i++){
+      for(int i = 0; i < 12; i++){
         Serial.print(incomingPacket[i]);
       }
       Serial.println("");
-      validatedSignal = 0;
     }
     else{
       Serial.println("Signal not calibrated yet");
