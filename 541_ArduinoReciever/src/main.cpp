@@ -71,10 +71,10 @@ void readData(){
         
         digitalWrite(7, LOW);
         if(hit){
-          incomingPacket[readCount % 14] = 1;
+          incomingPacket[readCount] = 1;
         }
         else{
-          incomingPacket[readCount % 14] = 0;
+          incomingPacket[readCount] = 0;
         }
         
       //}
@@ -355,7 +355,7 @@ void loop() {
     }
 
     Serial.println("Packet detected");
-    for(int i = 0; i < 14; i++){
+    for(int i = 1; i < 14; i++){
       Serial.print(incomingPacket[i]);
     }
     Serial.print('\n');
