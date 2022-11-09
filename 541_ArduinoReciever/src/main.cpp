@@ -98,9 +98,10 @@ void resetArrays(){
 volatile int hitsCounted;
 //Use for getting exact start of signal tranmsission. Used for detecting falling edge of bits
 void awaitTriggerSignal(){
+  digitalWrite(3,LOW);
   if(!trigger){
     trigger = 1;
-    Timer1.restart();
+    //Timer1.restart();
     hit = 0;
     hitsCounted = 0;
     
@@ -108,7 +109,7 @@ void awaitTriggerSignal(){
   else{
      hit = 1;
      hitsCounted++;
-     digitalWrite(3,LOW);
+     
   }  
 
   digitalWrite(3, HIGH);
