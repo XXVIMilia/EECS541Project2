@@ -121,6 +121,7 @@ bool verifySignal(){
   //Timer1.attachInterrupt(readData,detectedBitRate);  
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
+  delayMicroseconds(10);
   reading = 1;//Enables reading interrupt
 
   
