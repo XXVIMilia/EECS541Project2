@@ -301,7 +301,7 @@ void decodeHam(){
   }
 
 
-  int j,k;
+
   j = k = 0;
   int decodedPacket[8];
   int fixedDecodedPacket[8];
