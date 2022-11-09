@@ -330,6 +330,7 @@ void loop() {
     Serial.print("Detected Bit Rate: ");
     Serial.println(detectedBitRate);
     Timer1.attachInterrupt(readData,detectedBitRate);
+    Timer1.start();
     timerActive = 1;
 
 
