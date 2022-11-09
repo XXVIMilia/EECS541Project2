@@ -134,7 +134,6 @@ void awaitTriggerSignal(){
 
 //Verifies the calculated bit delay is usable
 bool verifySignal(){
-  detachInterrupt(digitalPinToInterrupt(2));
   trigger = 0;
   readCount = 0;
   hit = 0;
@@ -193,7 +192,6 @@ void setup() {
   digitalWrite(3, HIGH);
   digitalWrite(7, HIGH);
   Timer1.initialize();
-  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   
 }
 
@@ -339,6 +337,7 @@ void loop() {
   if(command == 'c'){
     Serial.println("Attempting to detect signal");
     calibrateDelay();
+    attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
     Serial.print("Detected Bit Rate: ");
     Serial.println(detectedBitRate);
     Timer1.attachInterrupt(readData,detectedBitRate);
