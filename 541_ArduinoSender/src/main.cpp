@@ -5,7 +5,7 @@
 
 float upTime,downTime;
 int packet[8];  //[char -> bits]
-volatile bool output[14]; //[trigger(0),hammingcode(1-12),parity(13)]
+volatile bool output[15]; //[trigger(0),hammingcode(1-12),parity(13)]
 int ham[12];
 uint8_t data;
 
@@ -156,7 +156,7 @@ void loop() {
 
   if(command == 'p'){
     Serial.println("Sending pilot signal");
-      for(int i = 0; i < 14; i++){
+      for(int i = 0; i < 15; i++){
         output[i] = 1;
     }
     counter = 0;
