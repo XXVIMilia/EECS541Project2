@@ -137,7 +137,7 @@ bool verifySignal(){
   detachInterrupt(digitalPinToInterrupt(2));
 
   digitalWrite(3, HIGH);
-
+  digitalWrite(7, HIGH);
 
 
   for(int i = 0; i < 13; i++){
@@ -179,7 +179,7 @@ void setup() {
   pinMode(3,OUTPUT);
   pinMode(7,OUTPUT);
   digitalWrite(3, HIGH);
-  pinMode(7,OUTPUT);
+  digitalWrite(7, HIGH);
   Timer1.initialize();
   
 }
