@@ -230,8 +230,8 @@ void decodeHam(){
   int hamCorrected[12];
 
   for(int i = 1; i < 13 ; i++){
-      ham[i-1] = incomingPacket[i];
-      hamCorrected[i-1] = incomingPacket[i];
+      ham[i-1] = incomingPacket[13 - i];
+      hamCorrected[i-1] = incomingPacket[13 - i];
     }
 
   int ones = 0;
