@@ -65,8 +65,9 @@ void calibrateDelay(){
 
 
 void readData(){
+    digitalWrite(7, LOW);
     if(trigger){
-      digitalWrite(7, LOW);
+      
       if(hit){
         incomingPacket[readCount % 13] = 1;
       }
