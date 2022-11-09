@@ -25,7 +25,6 @@ bool recievingMode = 0;
 
 //Message reading
 volatile int incomingPacket[13];
-volatile bool reading = 0;
 volatile int readCount = 0;
 
 
@@ -66,7 +65,7 @@ void calibrateDelay(){
 
 
 void readData(){
-    if(reading){
+    if(trigger){
       if(hit){
         incomingPacket[readCount % 13] = 1;
       }
@@ -76,6 +75,10 @@ void readData(){
       
       readCount++;
       hit = 0;
+      if(readCount == 13){
+        readCount = 0;
+        trigger = 0;
+      }
       //digitalWrite(3, LOW);
     }
     
@@ -100,12 +103,15 @@ void awaitTriggerSignal(){
     Timer1.restart();
     hit = 0;
     hitsCounted = 0;
+    
   }
   else{
      hit = 1;
      hitsCounted++;
      digitalWrite(3,LOW);
   }  
+
+  digitalWrite(3, HIGH);
   
 }
 
@@ -122,14 +128,10 @@ bool verifySignal(){
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
   Timer1.restart();
-  reading = 1;//Enables reading interrupt
 
   
-  while(readCount < 14){
-    //delayMicroseconds(100);
-    digitalWrite(3, HIGH);
-  }
-  reading = 0;//Pauses Reading Interrupt
+  while(trigger){}
+
   detachInterrupt(digitalPinToInterrupt(2));
 
   digitalWrite(3, HIGH);
@@ -157,12 +159,9 @@ int readMessage(){
   while(!trigger){}
 
 
-  reading = 1;
   
-  while(readCount < 13){
-    digitalWrite(3, HIGH);
-  }
-  reading = 0;
+  while(trigger){}
+
   detachInterrupt(digitalPinToInterrupt(2));
   Serial.print("Hits counted: ");
   Serial.println(hitsCounted);
