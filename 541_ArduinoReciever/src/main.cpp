@@ -359,7 +359,7 @@ void loop() {
     }
 
     Serial.println("Packet detected");
-    for(int i = 0; i < 14; i++){
+    for(int i = 1; i < 14; i++){
       Serial.print(incomingPacket[i]);
     }
     Serial.print('\n');
@@ -371,7 +371,7 @@ void loop() {
       readMessage();
       //do{}while(!readMessage());//Trying to fix reading bug. Ugly solution
       Serial.print("Recieved Packet: ");
-      for(int i = 0; i < 13; i++){
+      for(int i = 1; i < 14; i++){
         Serial.print(incomingPacket[i]);
       }
       Serial.println("");
