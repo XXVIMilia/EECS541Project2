@@ -47,7 +47,7 @@ void fall(){
 void calibrateDelay(){
   count = 0;
   calibrating = 1;
-  attachInterrupt(digitalPinToInterrupt(2),fall,RISING);
+  attachInterrupt(digitalPinToInterrupt(2),fall,FALLING);
   while(count < 20){
     //Busy Wait
   }
@@ -97,7 +97,7 @@ volatile int hitsCounted;
 void awaitTriggerSignal(){
   if(!trigger){
     trigger = 1;
-    Timer1.restart();
+    Timer1.start();
     hit = 0;
     hitsCounted = 0;
   }
@@ -117,7 +117,7 @@ bool verifySignal(){
   hit = 0;
 
   //Timer1.attachInterrupt(readData,detectedBitRate);  
-  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,RISING);
+  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
   reading = 1;//Enables reading interrupt
 
@@ -150,8 +150,9 @@ int readMessage(){
   hitsCounted = 0;
 
 
-  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,RISING);
+  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
+
   reading = 1;
   
   while(readCount < 13){

@@ -163,7 +163,7 @@ void loop() {
     sequence = 0;
     Timer1.attachInterrupt(sendMessage,45);
     sending = 1;
-    delay(1000);
+    delay(10000);
     sending = 0;
     
     Serial.println("Done sending pilot signal");
@@ -209,12 +209,11 @@ void loop() {
     if(ready_to_send){
       counter = 0;
       sequence = 0;
-      for(int i = 0; i < 14; i++){
-        output[i] = 1;
-    }
+
       sending = 1;
       while(counter < 15){}
       sending = 0;
+      digitalWrite(dataPin,0);
     }
     else{
       Serial.println("Set character first");
