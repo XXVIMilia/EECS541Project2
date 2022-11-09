@@ -230,7 +230,7 @@ void decodeHam(){
 
   int ones = 0;
   ones = 0;
-    for(int i = 0; i < 13 ; i++){
+    for(int i = 1; i < 14 ; i++){
       if(incomingPacket[i]){
         ones++;
       }
@@ -247,8 +247,8 @@ void decodeHam(){
  
 
   //Load data from packet into ham holder
-  for (int i = 0; i < 12; i++) {
-    ham[i] = incomingPacket[11-i];
+  for (int i = 0; i < 13; i++) {
+    ham[i] = incomingPacket[12-i];
   }
 
   // Traverse and update the
