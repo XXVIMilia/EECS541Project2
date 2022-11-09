@@ -127,10 +127,10 @@ bool verifySignal(){
   readCount = 0;
   hit = 0;
 
-  //Timer1.attachInterrupt(readData,detectedBitRate);  
+   
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
-
+  Timer1.attachInterrupt(readData,detectedBitRate); 
 
   
   while(trigger){}
@@ -329,8 +329,8 @@ void loop() {
     calibrateDelay();
     Serial.print("Detected Bit Rate: ");
     Serial.println(detectedBitRate);
-    Timer1.attachInterrupt(readData,detectedBitRate);
-    Timer1.start();
+    //Timer1.attachInterrupt(readData,detectedBitRate);
+    //Timer1.start();
     timerActive = 1;
 
 
