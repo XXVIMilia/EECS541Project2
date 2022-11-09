@@ -280,9 +280,21 @@ void decodeHam(){
     ham[position - 1] = value;
     hamCorrected[position - 1] = value;
 
+  
+  }
+
+  for (int i = 0; i < 4; i++) {
+    // Calculate error
+    int position = (int)(1 << i);
     error |= (uint8_t)(ham[position -1] << i);
   
   }
+
+  Serial.print("Newly Calculated Ham: ");
+  for(int i = 0; i < 12; i++) {
+      Serial.print(ham[11-i],DEC);
+  }
+    Serial.print('\n');
 
   
   if((error > 0) && !parity){
