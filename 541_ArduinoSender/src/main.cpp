@@ -7,6 +7,7 @@
 float upTime,downTime;
 int packet[8];  //[char -> bits]
 int output[14]; //[trigger(0),hammingcode(1-12),parity(13)]
+int ham[12];
 uint8_t data;
 
 volatile int counter;
@@ -14,7 +15,7 @@ volatile int sequence;
 
 
 void sendMessage(){
-  if((sequence % 14) == 0){
+  if((sequence % 9) == 0){
     digitalWrite(dataPin,output[counter%14]);
     counter++;
   }
@@ -41,21 +42,83 @@ void setup() {
 }
 
 
+// Function to calculate bit for
+// ith position
+int ham_calc(int position, int code_length){
+  int count = 0, i, j;
+  i = position - 1;
 
+  // Traverse to store Hamming Code
+  while (i < code_length) {
+    for (j = i; j < i + position; j++) {
+      // If current bit is 1
+      if (ham[j] == 1)
+          count++;
+    }
+
+    // Update i
+    i = i + 2 * position;
+  }
+
+  if (count % 2 == 0){
+    return 0;
+  } 
+  else{
+    return 1;
+  }
+}
 
 
 
 
 void hammingCodeGenerate(){
   //Implement the hamming code
-}
+  int k,j = 0;
+  
+  for(int i = 0; i < 12; i++){
+    if(i == ((int)pow(2, k) - 1)){
+      ham[i] = -1;
+      k++;
+    }
+    else{
+      ham[i] = packet[j]; 
+      j++;
+    }
+  }
+
+  // Traverse and update the
+  // hamming code
+  for (int i = 0; i < 4; i++) {
+
+    // Find current position
+    int position = (int)pow(2, i);
+
+    // Find value at current position
+    int value = ham_calc(position, 12);
+
+    // Update the code
+    ham[position - 1] = value;
+  
+  }
+
+  // Print the Hamming Code
+  Serial.print("The generated Code Word is: ");
+    for(int i = 0; i < 12; i++) {
+        Serial.print(ham[11-i]);
+  }
+  Serial.print('\n');
+
+  }
+
 
 
 void setOutput(uint8_t input){
   Serial.print("Transcribing to packet: ");
   for(int i = 0; i < 8; i++){
     packet[i] = (input >> i) & (0x01);
-    Serial.print(packet[i]);
+  }
+  for(int i = 0; i < 8; i++){
+    Serial.print(packet[7-i]);
   }
   Serial.print("\n");
 
@@ -71,13 +134,15 @@ void loop() {
   while(Serial.available() < 1){}
   command = Serial.read();
 
-  if(command == 'c'){
+  if(command == 'p'){
     Serial.println("Sending pilot signal");
       for(int i = 0; i < 14; i++){
         output[i] = 1;
     }
-    Timer1.attachInterrupt(sendMessage,45);
-    delay(500);
+    counter = 0;
+    sequence = 0;
+    Timer1.attachInterrupt(sendMessage,50);
+    delay(10000);
     Timer1.detachInterrupt();
     Serial.println("Done sending pilot signal");
 
@@ -90,6 +155,7 @@ void loop() {
     Serial.println(data,BIN);
     setOutput(data);
     ready_to_send = 1;
+    hammingCodeGenerate();
 
     
   }

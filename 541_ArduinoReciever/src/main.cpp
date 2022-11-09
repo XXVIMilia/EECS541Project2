@@ -24,7 +24,7 @@ bool validatedSignal = 0;
 bool recievingMode = 0;
 
 //Message reading
-volatile int incomingPacket[12];
+volatile int incomingPacket[13];
 volatile bool reading = 0;
 volatile int readCount = 0;
 char decodedMessage;
@@ -70,10 +70,10 @@ void readData(){
     digitalWrite(3, LOW);
     if(reading){
       if(hit){
-      incomingPacket[readCount % 12] = 1;
+      incomingPacket[readCount % 13] = 1;
     }
     else{
-      incomingPacket[readCount % 12] = 0;
+      incomingPacket[readCount % 13] = 0;
     }
     
     readCount++;
@@ -95,7 +95,7 @@ void resetArrays(){
   for(int i = 0; i < 20; i++){
     sampledDelays[i] = 0;
   }
-  for(int i = 0; i < 12; i++){
+  for(int i = 0; i < 13; i++){
     incomingPacket[i] = 0;
   }
 }
@@ -126,7 +126,7 @@ bool verifySignal(){
   reading = 1;
 
   
-  while(readCount < 12){
+  while(readCount < 13){
     //delayMicroseconds(100);
     digitalWrite(3, HIGH);
   }
@@ -137,7 +137,7 @@ bool verifySignal(){
 
 
 
-  for(int i = 0; i < 12; i++){
+  for(int i = 0; i < 13; i++){
     if(!incomingPacket[i]){ 
       return(false);
     }
@@ -156,7 +156,7 @@ void readMessage(){
   while(!trigger){}
   reading = 1;
   
-  while(readCount < 12){
+  while(readCount < 13){
     digitalWrite(3, HIGH);
   }
   //Timer1.detachInterrupt();
@@ -206,12 +206,13 @@ void loop() {
     }
 
     Serial.println("Packet detected");
-    for(int i = 0; i < 12; i++){
+    for(int i = 0; i < 13; i++){
       Serial.print(incomingPacket[i]);
     }
     Serial.print('\n');
   }
   else if(command == 'r'){
+      recievingMode = 1;//DEBUG ONLY!!!!!!!!!!!!!!
       if(recievingMode){
       resetArrays();
       Serial.print("Entering reading mode in: \n3...");
@@ -221,7 +222,7 @@ void loop() {
       Serial.println("1...");
       delay(1000);
       readMessage();
-      for(int i = 0; i < 12; i++){
+      for(int i = 0; i < 13; i++){
         Serial.print(incomingPacket[i]);
       }
       Serial.println("");
