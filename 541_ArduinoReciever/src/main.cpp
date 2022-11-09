@@ -24,7 +24,7 @@ bool validatedSignal = 0;
 bool recievingMode = 0;
 
 //Message reading
-volatile int incomingPacket[13];
+volatile int incomingPacket[14];
 volatile int readCount = 0;
 
 
@@ -81,7 +81,7 @@ void readData(){
       
 
       hit = 0;
-      if(readCount == 13){
+      if(readCount == 14){
         readCount = 0;
         trigger = 0;
       }
@@ -355,7 +355,7 @@ void loop() {
     }
 
     Serial.println("Packet detected");
-    for(int i = 0; i < 13; i++){
+    for(int i = 1; i < 13; i++){
       Serial.print(incomingPacket[i]);
     }
     Serial.print('\n');
