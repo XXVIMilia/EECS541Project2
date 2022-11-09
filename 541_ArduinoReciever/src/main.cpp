@@ -197,6 +197,8 @@ void setup() {
 }
 
 
+int ham[12];
+int hamCorrected[12];
 bool ham_calc(int position, int code_length){
   int count = 0, i, j;
   i = position - 1;
@@ -205,7 +207,7 @@ bool ham_calc(int position, int code_length){
   while (i < code_length) {
     for (j = i; j < i + position; j++) {
       // If current bit is 1
-      if (incomingPacket[j] == 1)
+      if (ham[j] == 1)
           count++;
     }
 
@@ -226,8 +228,7 @@ bool ham_calc(int position, int code_length){
 void decodeHam(){
   uint8_t error, decodedMessage;
   error = decodedMessage = 0;
-  int ham[12];
-  int hamCorrected[12];
+
 
   for(int i = 1; i < 13 ; i++){
       ham[i-1] = incomingPacket[13 - i];
@@ -300,7 +301,7 @@ void decodeHam(){
   if((error > 0) && !parity){
     Serial.println("Two bit error detected");
     Serial.print("Error: ");
-    Serial.println(error,DEC);
+    Serial.println(error);
     Serial.print("Parity: ");
     Serial.println(parity);
 
