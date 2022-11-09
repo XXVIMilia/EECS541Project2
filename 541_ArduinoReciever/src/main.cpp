@@ -253,7 +253,7 @@ void decodeHam(){
   
   if((error > 0) && !parity){
     Serial.println("Two bit error detected");
-    Serial.print("Errror: ");
+    Serial.print("Error: ");
     Serial.println(error);
     Serial.print("Parity: ");
     Serial.println(parity);
@@ -353,12 +353,7 @@ void loop() {
   else if(command == 'r'){
     if(recievingMode){
       resetArrays();
-      Serial.print("Entering reading mode in: \n3...");
-      delay(1000);
-      Serial.print("2...");
-      delay(1000);
-      Serial.println("1...");
-      delay(1000);
+      Serial.println("Entering reading mode:");
       readMessage();
       //do{}while(!readMessage());//Trying to fix reading bug. Ugly solution
       Serial.print("Recieved Packet: ");

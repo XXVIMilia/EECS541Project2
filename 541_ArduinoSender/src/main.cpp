@@ -13,8 +13,10 @@ volatile int counter;
 volatile int sequence;
 
 
+volatile bool sending;
 void sendMessage(){
-  if((sequence % 10) == 0){
+  if(sending){
+    if((sequence % 10) == 0){
     digitalWrite(dataPin,output[counter%14]);
     counter++;
   }
@@ -22,6 +24,7 @@ void sendMessage(){
     digitalWrite(dataPin, 0);
   }
   sequence++;
+  }
 }
 
 
@@ -159,8 +162,10 @@ void loop() {
     counter = 0;
     sequence = 0;
     Timer1.attachInterrupt(sendMessage,45);
-    delay(10000);
-    Timer1.stop();
+    sending = 1;
+    delay(1000);
+    sending = 0;
+    
     Serial.println("Done sending pilot signal");
 
   }
@@ -204,10 +209,12 @@ void loop() {
     if(ready_to_send){
       counter = 0;
       sequence = 0;
-      Timer1.restart();
+      for(int i = 0; i < 14; i++){
+        output[i] = 1;
+    }
+      sending = 1;
       while(counter < 15){}
-      Timer1.stop();
-      Serial.println("Transmission complete");
+      sending = 0;
     }
     else{
       Serial.println("Set character first");
