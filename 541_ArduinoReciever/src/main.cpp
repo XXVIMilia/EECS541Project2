@@ -67,19 +67,19 @@ void calibrateDelay(){
 void readData(){
     
     if(trigger){
-      if(readCount == 0){
-        //Ignore first bit in stream
-      }
-      else{
+      if(readCount > 0){//Ignore first bit in stream
+        
         digitalWrite(7, LOW);
-      if(hit){
-        incomingPacket[readCount % 13] = 1;
-      }
-      else{
-        incomingPacket[readCount % 13] = 0;
+        if(hit){
+          incomingPacket[readCount-1 % 13] = 1;
+        }
+        else{
+          incomingPacket[readCount-1 % 13] = 0;
+        }
+        
       }
       
-      readCount++;
+
       hit = 0;
       if(readCount == 14){
         readCount = 0;
@@ -87,9 +87,9 @@ void readData(){
       }
       digitalWrite(7, HIGH);
 
-      }
-      
+      readCount++;
     }
+    
     
     
 }
