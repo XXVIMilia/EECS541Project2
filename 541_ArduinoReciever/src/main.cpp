@@ -248,7 +248,7 @@ void decodeHam(){
   j = k = 0;
   //Load data from packet into ham holder
   for(int i = 1; i < 13; i++){
-    if(i == (int)(1 << k) - 1){
+    if(i-1 == (int)(1 << k) - 1){
 
       ham[i-1] = -1;
       k++;
