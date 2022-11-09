@@ -66,7 +66,6 @@ void calibrateDelay(){
 
 
 void readData(){
-    //digitalWrite(3, LOW);
     if(reading){
       if(hit){
         incomingPacket[readCount % 13] = 1;
@@ -77,6 +76,7 @@ void readData(){
       
       readCount++;
       hit = 0;
+      digitalWrite(3, LOW);
     }
     
     
@@ -104,7 +104,7 @@ void awaitTriggerSignal(){
   else{
      hit = 1;
      hitsCounted++;
-     digitalWrite(3,LOW);
+     //digitalWrite(3,LOW);
   }  
   
 }
