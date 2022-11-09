@@ -76,7 +76,7 @@ void readData(){
       
       readCount++;
       hit = 0;
-      //digitalWrite(3, LOW);
+      //digitalWrite(7, LOW);
     }
     
     
@@ -103,7 +103,7 @@ void awaitTriggerSignal(){
   else{
      hit = 1;
      hitsCounted++;
-     digitalWrite(3,LOW);
+     digitalWrite(7,LOW);
   }  
   
 }
@@ -126,13 +126,13 @@ bool verifySignal(){
   
   while(readCount < 14){
     //delayMicroseconds(100);
-    digitalWrite(3, HIGH);
+    digitalWrite(7, HIGH);
   }
   reading = 0;//Pauses Reading Interrupt
   detachInterrupt(digitalPinToInterrupt(2));
   Timer1.detachInterrupt();
 
-  digitalWrite(3, HIGH);
+  digitalWrite(7, HIGH);
 
 
 
@@ -161,7 +161,7 @@ int readMessage(){
   reading = 1;
   
   while(readCount < 13){
-    digitalWrite(3, HIGH);
+    digitalWrite(7, HIGH);
   }
   reading = 0;
   detachInterrupt(digitalPinToInterrupt(2));
@@ -177,8 +177,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(2,INPUT);
-  pinMode(3,OUTPUT);
-  digitalWrite(3, HIGH);
+  pinMode(7,OUTPUT);
+  digitalWrite(7, HIGH);
   Timer1.initialize();
   
 }
