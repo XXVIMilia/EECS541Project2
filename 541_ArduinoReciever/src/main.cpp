@@ -244,12 +244,25 @@ void decodeHam(){
       parity = 1;
     }
 
- 
-
+  int j, k;
+  j = k = 0;
   //Load data from packet into ham holder
-  for (int i = 0; i < 13; i++) {
-    ham[i] = incomingPacket[12-i];
+  for(int i = 0; i < 12; i++){
+    if(i == (int)(1 << k) - 1){
+
+      ham[i] = -1;
+      k++;
+    }
+    else{
+      ham[i] = incomingPacket[j+1]; 
+      j++;
+    }
   }
+  Serial.print("Redundant locations: ");
+  for(int i = 0; i < 12; i++) {
+      Serial.print(ham[11-i],DEC);
+  }
+    Serial.print('\n');
 
   // Traverse and update the
   // hamming code
