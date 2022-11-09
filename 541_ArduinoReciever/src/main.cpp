@@ -81,10 +81,10 @@ void readData(){
         readCount = 0;
         trigger = 0;
       }
-      digitalWrite(7, HIGH);
+      
     }
     
-    
+    digitalWrite(7, HIGH);
 }
 
 //Simple cleanup function
