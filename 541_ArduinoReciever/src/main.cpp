@@ -129,7 +129,7 @@ bool verifySignal(){
   //Timer1.attachInterrupt(readData,detectedBitRate);  
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
-  Timer1.restart();
+
 
   
   while(trigger){}
@@ -319,23 +319,16 @@ void decodeHam(){
 bool timerActive = 0;
 void loop() {
   resetArrays();
-  detachInterrupt(digitalPinToInterrupt(2));
-  Timer1.stop();
   Serial.println("Send a command: 'c' = calibrate, 'r' = read");
   while(!Serial.available()){}
   command = Serial.read(); 
 
   if(command == 'c'){
-    if(timerActive){
-      Timer1.detachInterrupt();
-      timerActive = 0;
-    }
     Serial.println("Attempting to detect signal");
     calibrateDelay();
     Serial.print("Detected Bit Rate: ");
     Serial.println(detectedBitRate);
     Timer1.attachInterrupt(readData,detectedBitRate);
-    Timer1.stop();
     timerActive = 1;
 
 
