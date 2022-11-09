@@ -76,7 +76,7 @@ void readData(){
       
       readCount++;
       hit = 0;
-      digitalWrite(3, LOW);
+      //digitalWrite(3, LOW);
     }
     
     
@@ -103,7 +103,7 @@ void awaitTriggerSignal(){
   else{
      hit = 1;
      hitsCounted++;
-     //digitalWrite(3,LOW);
+     digitalWrite(3,LOW);
   }  
   
 }
