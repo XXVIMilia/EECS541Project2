@@ -105,23 +105,28 @@ void resetArrays(){
 }
 
 volatile int hitsCounted;
+volatile bool awaitTrigger = 0;
 //Use for getting exact start of signal tranmsission. Used for detecting falling edge of bits
 void awaitTriggerSignal(){
-  digitalWrite(3,LOW);
-  if(!trigger){
-    trigger = 1;
-    // Timer1.restart();
-    hit = 0;
-    hitsCounted = 0;
-    
-  }
-  else{
-     hit = 1;
-     hitsCounted++;
-     
-  }  
+  if(awaitTrigger){
+    digitalWrite(3,LOW);
+    if(!trigger){
+      trigger = 1;
+      // Timer1.restart();
+      hit = 0;
+      hitsCounted = 0;
+      
+    }
+    else{
+      hit = 1;
+      hitsCounted++;
+      
+    }  
 
-  digitalWrite(3, HIGH);
+    digitalWrite(3, HIGH);
+
+    }
+  
   
 }
 
@@ -135,14 +140,13 @@ bool verifySignal(){
   hit = 0;
 
    
-  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
+  awaitTrigger = 1;
   while(!trigger){}
 
 
   
   while(trigger){}
-
-  detachInterrupt(digitalPinToInterrupt(2));
+  awaitTrigger = 0;
 
   digitalWrite(3, HIGH);
   digitalWrite(7, HIGH);
@@ -165,14 +169,14 @@ int readMessage(){
   hitsCounted = 0;
 
 
-  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
+  awaitTrigger = 1;
   while(!trigger){}
 
 
   
   while(trigger){}
+  awaitTrigger = 0;
 
-  detachInterrupt(digitalPinToInterrupt(2));
   Serial.print("Hits counted: ");
   Serial.println(hitsCounted);
   return(hitsCounted);
@@ -189,6 +193,7 @@ void setup() {
   digitalWrite(3, HIGH);
   digitalWrite(7, HIGH);
   Timer1.initialize();
+  attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   
 }
 
@@ -363,7 +368,6 @@ void loop() {
   }
   else if(command == 'r'){
     if(recievingMode){
-      resetArrays();
       Serial.println("Entering reading mode:");
       readMessage();
       //do{}while(!readMessage());//Trying to fix reading bug. Ugly solution
