@@ -71,10 +71,10 @@ void readData(){
         
         digitalWrite(7, LOW);
         if(hit){
-          incomingPacket[readCount-1 % 13] = 1;
+          incomingPacket[readCount % 13] = 1;
         }
         else{
-          incomingPacket[readCount-1 % 13] = 0;
+          incomingPacket[readCount % 13] = 0;
         }
         
       //}
