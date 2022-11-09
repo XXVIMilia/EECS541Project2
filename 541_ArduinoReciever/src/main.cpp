@@ -120,8 +120,7 @@ bool verifySignal(){
   //Timer1.attachInterrupt(readData,detectedBitRate);  
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
-  delayMicroseconds(25);
-  Timer1.restart();
+  Timer1.attachInterrupt(readData,detectedBitRate);
   reading = 1;//Enables reading interrupt
 
   
@@ -131,6 +130,7 @@ bool verifySignal(){
   }
   reading = 0;//Pauses Reading Interrupt
   detachInterrupt(digitalPinToInterrupt(2));
+  Timer1.detachInterrupt();
 
   digitalWrite(3, HIGH);
 
@@ -152,9 +152,10 @@ int readMessage(){
   hit = 0;
   hitsCounted = 0;
 
-
+  
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
+  Timer1.attachInterrupt(readData,detectedBitRate);
 
 
   reading = 1;
@@ -164,8 +165,9 @@ int readMessage(){
   }
   reading = 0;
   detachInterrupt(digitalPinToInterrupt(2));
-  //Serial.print("Hits counted: ");
-  //Serial.println(hitsCounted);
+  Timer1.detachInterrupt();
+  Serial.print("Hits counted: ");
+  Serial.println(hitsCounted);
   return(hitsCounted);
   
 }
@@ -317,7 +319,7 @@ bool timerActive = 0;
 void loop() {
   resetArrays();
   detachInterrupt(digitalPinToInterrupt(2));
-  Timer1.stop();
+  Timer1.detachInterrupt();
   Serial.println("Send a command: 'c' = calibrate, 'r' = read");
   while(!Serial.available()){}
   command = Serial.read(); 
@@ -353,6 +355,7 @@ void loop() {
       Serial.print(incomingPacket[i]);
     }
     Serial.print('\n');
+    Timer1.detachInterrupt();
     //do{}while(readMessage());//Trying to fix reading bug. Ugly solution
   }
   else if(command == 'r'){
