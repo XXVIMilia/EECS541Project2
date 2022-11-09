@@ -105,6 +105,7 @@ void awaitTriggerSignal(){
      hit = 1;
      hitsCounted++;
   }  
+  digitalWrite(3,LOW);
 }
 
 
