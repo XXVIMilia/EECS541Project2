@@ -367,6 +367,7 @@ void loop() {
   }
   else if(command == 'r'){
     if(recievingMode){
+      resetArrays();
       Serial.println("Entering reading mode:");
       readMessage();
       //do{}while(!readMessage());//Trying to fix reading bug. Ugly solution
