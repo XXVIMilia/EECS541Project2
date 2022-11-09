@@ -355,7 +355,7 @@ void loop() {
     }
 
     Serial.println("Packet detected");
-    for(int i = 0; i < 13; i++){
+    for(int i = 0; i < 14; i++){
       Serial.print(incomingPacket[i]);
     }
     Serial.print('\n');
