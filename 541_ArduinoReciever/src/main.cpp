@@ -151,7 +151,7 @@ bool verifySignal(){
   digitalWrite(7, HIGH);
 
 
-  for(int i = 0; i < 14; i++){
+  for(int i = 1; i < 14; i++){
     if(!incomingPacket[i]){ 
       return(false);
     }
