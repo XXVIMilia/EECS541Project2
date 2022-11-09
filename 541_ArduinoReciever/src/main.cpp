@@ -28,6 +28,8 @@ volatile int incomingPacket[14];
 volatile int readCount = 0;
 
 
+
+
 //User input
 char command;
 
@@ -228,9 +230,14 @@ void decodeHam(){
   int ham[12];
   int hamCorrected[12];
 
+  for(int i = 1; i < 13 ; i++){
+      ham[i-1] = incomingPacket[i];
+      hamCorrected[i-1] = incomingPacket[i];
+    }
+
   int ones = 0;
   ones = 0;
-    for(int i = 1; i < 14 ; i++){
+    for(int i = 1; i < 13 ; i++){
       if(incomingPacket[i]){
         ones++;
       }
@@ -247,16 +254,12 @@ void decodeHam(){
   int j, k;
   j = k = 0;
   //Load data from packet into ham holder
-  for(int i = 1; i < 13; i++){
-    if(i-1 == (int)(1 << k) - 1){
-
-      ham[i-1] = -1;
+  for(int i = 0; i < 12; i++){
+    if(i == (int)(1 << k) - 1){
+      ham[i] = -1;
       k++;
     }
-    else{
-      ham[i-1] = incomingPacket[j]; 
-      j++;
-    }
+
   }
   Serial.print("Redundant locations: ");
   for(int i = 0; i < 12; i++) {
