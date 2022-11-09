@@ -66,7 +66,7 @@ void calibrateDelay(){
 
 
 void readData(){
-    digitalWrite(3, LOW);
+    //digitalWrite(3, LOW);
     if(reading){
       if(hit){
         incomingPacket[readCount % 13] = 1;
@@ -97,7 +97,7 @@ volatile int hitsCounted;
 void awaitTriggerSignal(){
   if(!trigger){
     trigger = 1;
-    Timer1.start();
+    Timer1.restart();
     hit = 0;
     hitsCounted = 0;
   }
@@ -154,6 +154,7 @@ int readMessage(){
 
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
+
 
   reading = 1;
   
