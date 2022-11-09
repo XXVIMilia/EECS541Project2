@@ -300,7 +300,7 @@ void decodeHam(){
   if((error > 0) && !parity){
     Serial.println("Two bit error detected");
     Serial.print("Error: ");
-    Serial.println(error);
+    Serial.println(error,DEC);
     Serial.print("Parity: ");
     Serial.println(parity);
 
