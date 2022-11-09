@@ -236,7 +236,7 @@ void decodeHam(){
 
   int ones = 0;
   ones = 0;
-    for(int i = 1; i < 13 ; i++){
+    for(int i = 1; i < 14 ; i++){
       if(incomingPacket[i]){
         ones++;
       }
