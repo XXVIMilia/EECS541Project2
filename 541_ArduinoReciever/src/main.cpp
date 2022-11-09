@@ -67,7 +67,6 @@ void calibrateDelay(){
 
 
 void readData(){
-    
     if(trigger){
       //if(readCount > 0){//Ignore first bit in stream
         
@@ -383,7 +382,7 @@ void loop() {
   }
   else if(command == 'r'){
     if(recievingMode){
-      resetArrays();
+      //resetArrays();
       Serial.println("Entering reading mode:");
       readMessage();
       //do{}while(!readMessage());//Trying to fix reading bug. Ugly solution
