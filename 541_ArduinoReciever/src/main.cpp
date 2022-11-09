@@ -103,7 +103,7 @@ void awaitTriggerSignal(){
   digitalWrite(3,LOW);
   if(!trigger){
     trigger = 1;
-    //Timer1.restart();
+    Timer1.restart();
     hit = 0;
     hitsCounted = 0;
     

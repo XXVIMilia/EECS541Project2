@@ -163,7 +163,7 @@ void loop() {
     sequence = 0;
     Timer1.attachInterrupt(sendMessage,45);
     sending = 1;
-    delay(10000);
+    delay(1000);
     sending = 0;
     
     Serial.println("Done sending pilot signal");
