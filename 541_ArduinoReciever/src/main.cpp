@@ -66,6 +66,7 @@ void calibrateDelay(){
 
 void readData(){
     if(trigger){
+      digitalWrite(7, LOW);
       if(hit){
         incomingPacket[readCount % 13] = 1;
       }
@@ -79,7 +80,7 @@ void readData(){
         readCount = 0;
         trigger = 0;
       }
-      //digitalWrite(3, LOW);
+      digitalWrite(7, HIGH);
     }
     
     
@@ -176,7 +177,9 @@ void setup() {
   Serial.begin(9600);
   pinMode(2,INPUT);
   pinMode(3,OUTPUT);
+  pinMode(7,OUTPUT);
   digitalWrite(3, HIGH);
+  pinMode(7,OUTPUT);
   Timer1.initialize();
   
 }
