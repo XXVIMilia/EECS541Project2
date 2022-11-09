@@ -97,7 +97,6 @@ volatile int hitsCounted;
 void awaitTriggerSignal(){
   if(!trigger){
     trigger = 1;
-    Timer1.restart();
     hit = 0;
     hitsCounted = 0;
   }
@@ -121,7 +120,8 @@ bool verifySignal(){
   //Timer1.attachInterrupt(readData,detectedBitRate);  
   attachInterrupt(digitalPinToInterrupt(2),awaitTriggerSignal,FALLING);
   while(!trigger){}
-  delayMicroseconds(10);
+  delayMicroseconds(25);
+  Timer1.restart();
   reading = 1;//Enables reading interrupt
 
   
