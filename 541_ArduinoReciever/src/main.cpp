@@ -230,7 +230,7 @@ void decodeHam(){
   error = decodedMessage = 0;
 
 
-  for(int i = 1; i < 14 ; i++){
+  for(int i = 1; i < 13 ; i++){
       ham[12-i] = incomingPacket[i-1];
       hamCorrected[12-i] = incomingPacket[i-1];
     }
