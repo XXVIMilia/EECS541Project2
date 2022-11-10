@@ -290,7 +290,7 @@ void decodeHam(){
   }
 
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 3; i >= 0; i--) {
     // Calculate error
     int position = (int)(1 << i);
     error |= (uint8_t)(ham[position -1] << i);
