@@ -355,7 +355,7 @@ void decodeHam(){
   }
   else{
     Serial.print("Data: ");
-    Serial.println((char)data);
+    Serial.println(data,BIN);
   }
 
 }
