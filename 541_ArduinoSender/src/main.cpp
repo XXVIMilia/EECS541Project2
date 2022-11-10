@@ -148,7 +148,7 @@ char command;
 bool ready_to_send = 0;
 bool parity;
 int ones = 0;
-uint8_t bitFlip_i = -1;
+int bitFlip_i = -1;
 void loop() {
   Serial.flush();
   Serial.println("Send a command: 'p' = send pilot signal, 'c' = set character to deliver, 'm' = send message,'e' = set bit error");
@@ -240,7 +240,7 @@ void loop() {
       Serial.println(bitFlip_i);
     }
     else{
-      Serial.print("Invalid index, no error set");
+      Serial.println("Invalid index, no error set");
       bitFlip_i = -1;
     }
     

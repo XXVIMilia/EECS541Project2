@@ -270,11 +270,6 @@ void decodeHam(){
     }
 
 
-  Serial.print("Redundant locations: ");
-  for(int i = 0; i < 12; i++) {
-      Serial.print(ham[11-i],DEC);
-  }
-    Serial.print('\n');
 
   // Traverse and update the
   // hamming code
