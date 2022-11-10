@@ -5,7 +5,7 @@
 
 float upTime,downTime;
 int packet[8];  //[char -> bits]
-volatile bool output[15]; //[trigger(0),hammingcode(1-12),parity(13)]
+volatile bool output[15]; //[trigger(0),hammingcode(1-13),parity(14)]
 int ham[12];
 uint8_t data;
 
@@ -148,6 +148,7 @@ char command;
 bool ready_to_send = 0;
 bool parity;
 int ones = 0;
+uint8_t bitFlip_i = -1;
 void loop() {
   Serial.flush();
   Serial.println("Send a command: 'p' = send pilot signal, 'c' = set character to deliver, 'm' = send message,'e' = set bit error");
@@ -206,7 +207,13 @@ void loop() {
     
   }
   else if(command == 'm'){
+    if(bitFlip_i != -1){
+      Serial.print("adding error to index: ");
+      Serial.println(bitFlip_i);
+      output[bitFlip_i+1] = !(bool)output[bitFlip_i+1];
+    }
     if(ready_to_send){
+     
       counter = 0;
       sequence = 0;
 
@@ -220,8 +227,27 @@ void loop() {
     }
     
   }
+  else if(command == 'e'){
+    Serial.println("Type your desired bit flip location (hex) (0-13)");
+    while(!Serial.available()){}
+    bitFlip_i = Serial.read();
+    bitFlip_i -= 48;
+    if(bitFlip_i > 9){
+      bitFlip_i -= 39;
+    }
+    if(bitFlip_i >=0 && bitFlip_i < 14){
+      Serial.print("Index to flip: ");
+      Serial.println(bitFlip_i);
+    }
+    else{
+      Serial.print("Invalid index, no error set");
+      bitFlip_i = -1;
+    }
+    
+
+  }
   else{
     Serial.println("Unknown character");
   }
-  delay(1000);
+  delay(500);
 }

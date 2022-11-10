@@ -201,19 +201,25 @@ int ham[12];
 int hamCorrected[12];
 bool ham_calc(int position, int code_length){
   int count = 0, i, j;
-  i = position - 1;
+  i = position-1;//Removed a one
 
   // Traverse to store Hamming Code
   while (i < code_length) {
     for (j = i; j < i + position; j++) {
       // If current bit is 1
-      if (ham[j] == 1)
+      if(ham[j] == 1){
+        if(j < 12){
           count++;
+        }
+        
+      }
+          
     }
 
     // Update i
     i = i + 2 * position;
   }
+
 
   if (count % 2 == 0){
     return 0;
@@ -229,16 +235,28 @@ void decodeHam(){
   uint8_t error, decodedMessage;
   error = decodedMessage = 0;
 
+  int i, p_n = 0, c_l, j, k;
+  i = 0;
 
-  for(int i = 1; i < 13 ; i++){
-      ham[12-i] = incomingPacket[i];
-      hamCorrected[12-i] = incomingPacket[i];
-    }
+  while (8 > (int)(1 << i) - (i + 1)) {
+    p_n++;
+    i++;
+  }
+  c_l = p_n + 8;
+
+  j = k = 0;
+
+
+  for(int i = 0; i < 12 ; i++){
+      ham[11-i] = incomingPacket[i+1];
+      hamCorrected[11-i] = incomingPacket[i+1];
+  }
+
 
   int ones = 0;
   ones = 0;
-    for(int i = 1; i < 14 ; i++){
-      if(incomingPacket[i]){
+    for(int z = 1; z < 14 ; z++){
+      if(incomingPacket[z]){
         ones++;
       }
     }
@@ -251,16 +269,7 @@ void decodeHam(){
       parity = 1;
     }
 
-  int j, k;
-  j = k = 0;
-  //Load data from packet into ham holder
-  for(int i = 0; i < 12; i++){
-    if(i == (int)(1 << k) - 1){
-      ham[i] = -1;
-      k++;
-    }
 
-  }
   Serial.print("Redundant locations: ");
   for(int i = 0; i < 12; i++) {
       Serial.print(ham[11-i],DEC);
@@ -269,13 +278,14 @@ void decodeHam(){
 
   // Traverse and update the
   // hamming code
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < p_n; i++) {
+
 
     // Find current position
     int position = (int)(1 << i);
 
     // Find value at current position
-    int value = ham_calc(position, 12);
+    int value = ham_calc(position, c_l);
 
     // Update the code
     ham[position - 1] = value;
