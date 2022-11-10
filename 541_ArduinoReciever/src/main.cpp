@@ -284,6 +284,8 @@ void decodeHam(){
   
   }
 
+  ham[11-3] != 
+
   for (int i = 0; i < 4; i++) {
     // Calculate error
     int position = (int)(1 << i);
