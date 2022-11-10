@@ -290,7 +290,7 @@ void decodeHam(){
   }
 
 
-  for (int i = 3; i >= 0; i--) {
+  for (int i = 0; i < 4; i++) {
     // Calculate error
     int position = (int)(1 << i);
     error |= (uint8_t)(ham[position -1] << i);
@@ -315,7 +315,7 @@ void decodeHam(){
   else if((error > 0) && parity){
     Serial.print("1 bit error at: ");
     Serial.println(error);
-    hamCorrected[error] = !hamCorrected[error];
+    //hamCorrected[error] = !hamCorrected[error];
   }
   else{
     Serial.println("No error detected");
@@ -348,10 +348,10 @@ void decodeHam(){
   if((error > 0) && !parity){
     Serial.println("Unable to decode");
   }else if((error > 0) && parity){
-    Serial.print("Uncorrected data: ");
-    Serial.println(data,BIN);
-    Serial.print("Corrected data: ");
-    Serial.println(correctedData,BIN);
+    //Serial.print("Uncorrected data: ");
+    //Serial.println(data,BIN);
+    //Serial.print("Corrected data: ");
+    //Serial.println(correctedData,BIN);
   }
   else{
     Serial.print("Data: ");

@@ -210,7 +210,7 @@ void loop() {
     if(bitFlip_i != -1){
       Serial.print("adding error to index: ");
       Serial.println(bitFlip_i);
-      output[bitFlip_i+1] = !(bool)output[bitFlip_i+1];
+      output[13 - bitFlip_i] = !(bool)output[13 - bitFlip_i];
     }
     if(ready_to_send){
      
