@@ -312,8 +312,8 @@ void decodeHam(){
     Serial.println(parity);
 
   }
-  else if((error > 0) && !parity){
-    Serial.print("Error at: ");
+  else if((error > 0) && parity){
+    Serial.print("1 bit error at: ");
     Serial.println(error);
     hamCorrected[error] = !hamCorrected[error];
   }
@@ -349,9 +349,9 @@ void decodeHam(){
     Serial.println("Unable to decode");
   }else if((error > 0) && parity){
     Serial.print("Uncorrected data: ");
-    Serial.println((char)data);
+    Serial.println(data,BIN);
     Serial.print("Corrected data: ");
-    Serial.println((char)correctedData);
+    Serial.println(correctedData,BIN);
   }
   else{
     Serial.print("Data: ");
